@@ -63,9 +63,9 @@ Days are calendar days in your local time, so a card answered correctly yesterda
 
 **ANSWER**: Your first answer.
 
-**IMPORTANCE**: LOW
 **LEVEL**: 0
 **DATE**: NA
+**IMPORTANT**: TRUE
 
 ######################################## NEW QUESTION ########################################
 
@@ -73,12 +73,11 @@ Days are calendar days in your local time, so a card answered correctly yesterda
 
 **ANSWER**: Your second answer.
 
-**IMPORTANCE**: LOW
 **LEVEL**: 0
 **DATE**: NA
 ```
 
-Every card needs an `**IMPORTANCE**` of `HIGH` or `LOW` on the line directly above `**LEVEL**`. It is shown next to the card's level while you study. You set it yourself; the app never changes it.
+To mark a card as important, add `**IMPORTANT**: TRUE` on the line directly below `**DATE**`, as in the first card above. Important cards show a ⚠️IMPORTANT⚠️ badge next to their level while you study. The line is optional: leave it out, or write `**IMPORTANT**: FALSE`, for an ordinary card. You set it yourself; the app never changes it.
 
 ## Tests
 

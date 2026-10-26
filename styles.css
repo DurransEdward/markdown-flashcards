@@ -27,7 +27,7 @@ body {
 }
 
 #level-badge,
-#importance-badge,
+#important-badge,
 #questions-remaining {
   padding: 4px 12px;
   background-color: #ced4da;
@@ -48,13 +48,9 @@ body {
   gap: 6px;
 }
 
-#importance-badge.importance-high {
+#important-badge {
   background-color: #1f4e9c;
   color: white;
-}
-
-#importance-badge.importance-low {
-  background-color: #dbe6f5;
 }
 
 #questions-remaining {

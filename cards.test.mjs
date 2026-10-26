@@ -58,9 +58,9 @@ const sampleFile = `######################################## NEW QUESTION ######
 print(1 + 1)
 \`\`\`
 
-**IMPORTANCE**: HIGH
 **LEVEL**: 2
 **DATE**: 2025-03-10
+**IMPORTANT**: TRUE
 
 ######################################## NEW QUESTION ########################################
 
@@ -68,33 +68,39 @@ print(1 + 1)
 
 **ANSWER**: Yes.
 
-**IMPORTANCE**: LOW
 **LEVEL**: 0
 **DATE**: NA
 `
 
-test('parses questions, answers, importance, level and date', () => {
+test('parses questions, answers, level, date and the optional important flag', () => {
     const cards = parseCards(sampleFile)
     assert.equal(cards.length, 2)
     assert.deepEqual(cards[0], {
         question: 'What is 1 + 1?',
         answer: '```python\nprint(1 + 1)\n```',
-        importance: 'HIGH',
+        important: true,
         level: 2,
         date: '2025-03-10',
         questionIndexInFile: 0,
     })
-    assert.deepEqual(cards[1], { question: 'Second?', answer: 'Yes.', importance: 'LOW', level: 0, date: 'NA', questionIndexInFile: 1 })
+    assert.deepEqual(cards[1], { question: 'Second?', answer: 'Yes.', important: false, level: 0, date: 'NA', questionIndexInFile: 1 })
+})
+
+test('an explicit FALSE is the same as leaving the line out', () => {
+    const card = parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**LEVEL**: 0\n**DATE**: NA\n**IMPORTANT**: FALSE')
+    assert.equal(card.important, false)
+    assert.equal(card.answer, 'a')
 })
 
 test('rejects malformed entries', () => {
     assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**LEARNED**: false', 3), /index 3/)
-    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**LEVEL**: 0\n**DATE**: NA', 2), /index 2/)
-    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**IMPORTANCE**: MEDIUM\n**LEVEL**: 0\n**DATE**: NA'), /invalid \*\*IMPORTANCE\*\*/)
-    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**IMPORTANCE**: high\n**LEVEL**: 0\n**DATE**: NA'), /invalid \*\*IMPORTANCE\*\*/)
-    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**IMPORTANCE**: HIGH\n**LEVEL**: 6\n**DATE**: NA'), /invalid \*\*LEVEL\*\*/)
-    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**IMPORTANCE**: HIGH\n**LEVEL**: 1\n**DATE**: NA'), /invalid \*\*DATE\*\*/)
-    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**IMPORTANCE**: HIGH\n**LEVEL**: 1\n**DATE**: 2025-02-30'), /invalid \*\*DATE\*\*/)
+    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**LEVEL**: 0', 2), /index 2/)
+    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**IMPORTANCE**: LOW\n**LEVEL**: 0\n**DATE**: NA'), /old \*\*IMPORTANCE\*\* line/)
+    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**LEVEL**: 0\n**DATE**: NA\n**IMPORTANT**: HIGH'), /invalid \*\*IMPORTANT\*\*/)
+    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**LEVEL**: 0\n**DATE**: NA\n**IMPORTANT**: true'), /invalid \*\*IMPORTANT\*\*/)
+    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**LEVEL**: 6\n**DATE**: NA'), /invalid \*\*LEVEL\*\*/)
+    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**LEVEL**: 1\n**DATE**: NA'), /invalid \*\*DATE\*\*/)
+    assert.throws(() => parseEntry('**QUESTION**: q\n\n**ANSWER**: a\n\n**LEVEL**: 1\n**DATE**: 2025-02-30\n**IMPORTANT**: TRUE'), /invalid \*\*DATE\*\*/)
 })
 
 test('rewriting a card only changes its level and date', () => {
@@ -103,11 +109,11 @@ test('rewriting a card only changes its level and date', () => {
     const rewritten = joinEntries(entries)
 
     const cards = parseCards(rewritten)
-    assert.equal(cards[0].importance, 'HIGH')
+    assert.equal(cards[0].important, true)
     assert.equal(cards[0].level, 3)
     assert.equal(cards[0].date, '2025-04-01')
     assert.equal(cards[0].answer, '```python\nprint(1 + 1)\n```')
-    assert.deepEqual(cards[1], { question: 'Second?', answer: 'Yes.', importance: 'LOW', level: 0, date: 'NA', questionIndexInFile: 1 })
+    assert.deepEqual(cards[1], { question: 'Second?', answer: 'Yes.', important: false, level: 0, date: 'NA', questionIndexInFile: 1 })
 })
 
 test('the bundled example deck parses with every card due', async () => {
