@@ -9,8 +9,8 @@ You need [Node.js](https://nodejs.org/) (which includes `npm`) installed.
 1. Clone this repository, then `cd` into it:
 
 ```bash
-git clone https://github.com/DurransEdward/markdown-flash-cards.git
-cd markdown-flash-cards
+git clone https://github.com/DurransEdward/markdown-flashcards.git
+cd markdown-flashcards
 ```
 
 2. Install dependencies:
