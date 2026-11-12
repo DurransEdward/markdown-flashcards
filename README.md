@@ -1,6 +1,6 @@
 # Mathematical and Programming Flash Cards
 
-This is a simple web app that allows you to create flash cards which include LaTeX equations and code snippets.
+This is a simple web app that allows you to create flash cards which include LaTeX equations, code snippets and audio clips.
 
 ## Clone, Install, and Run
 
@@ -77,6 +77,28 @@ Days are calendar days in your local time, so a card answered correctly yesterda
 ```
 
 To mark a card as important, add `**IMPORTANT**: TRUE` on the line directly below `**DATE**`, as in the first card above. Important cards show a ⚠️IMPORTANT⚠️ badge next to their level while you study. The line is optional: leave it out, or write `**IMPORTANT**: FALSE`, for an ordinary card. You set it yourself; the app never changes it.
+
+## Audio Clips
+
+Cards can play short audio clips, which is handy for learning a language.
+
+1. Put your clips in the `decks/audio` directory. Like your decks, they are not committed to git. Use `.mp3` or `.m4a` files, which play in every browser; `.wav` and `.ogg` also work.
+
+2. Add a clip anywhere in a question or answer with markdown's embed syntax, writing the path relative to the deck file:
+
+```markdown
+**QUESTION**: Que veut dire cette phrase ?
+
+![](audio/ca_va.m4a)
+
+**ANSWER**: How are you?
+
+![](audio/ca_va_reponse.m4a)
+```
+
+When a card appears, its first question clip starts after half a second and repeats, with a 1.5 second pause between plays, until you reveal the answer or move on. Revealing the answer stops the question clip and plays the first answer clip in the same way. Each clip has its own player, so you can pause it (which stops the repeats) or play any clip again; only one clip plays at a time. If your browser blocks autoplay, press play on the player.
+
+If a clip can't be loaded, or its path points outside `decks/audio`, the card shows an error in its place.
 
 ## Tests
 

@@ -1,23 +1,22 @@
-import { marked } from 'marked'
-import markedKatex from 'marked-katex-extension'
 import { parseCards, isDue, MAX_LEVEL } from './cards.mjs'
+import { createMarkdownRenderer, escapeHtml } from './markdown.mjs'
+import { setupAudio, autoplayFirst, stopAudio } from './audio.js'
 
-marked.use(markedKatex({ nonStandard: true }))
+const SERVER_URL = 'http://localhost:3000'
+const DECKS_URL = `${SERVER_URL}/decks/`
 
 const BUTTON_IDS = ['reveal-button', 'skip-button', 'correct-button', 'almost-correct-button', 'incorrect-button', 'restart-button']
+
+const parseMarkdown = createMarkdownRenderer(DECKS_URL)
 
 let cards = []
 let currentCardIndex = -1
 let deckFileName = ''
 
-function escapeHtml(text) {
-    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-}
-
 // Renders markdown/KaTeX; on failure shows an explicit error plus the raw source instead of breaking the card.
 function renderMarkdown(source, part) {
     try {
-        return marked.parse(source)
+        return parseMarkdown(source)
     } catch (error) {
         console.error(`Failed to render the ${part} of card ${currentCardIndex + 1}:`, error)
         return `<div class="render-error"><strong>⚠ Rendering error in this ${part}:</strong> ${escapeHtml(error.message)}</div>` +
@@ -64,7 +63,7 @@ async function loadDeckFromInput() {
     let text = ''
 
     try {
-        const response = await fetch(`http://localhost:3000/decks/${encodeURIComponent(deckFileName)}`)
+        const response = await fetch(`${DECKS_URL}${encodeURIComponent(deckFileName)}`)
 
         if (!response.ok) {
             throw new Error(`Could not load "${deckFileName}" (HTTP ${response.status}). Check that the file is inside the decks directory.`)
@@ -101,6 +100,7 @@ async function loadDeckFromInput() {
 }
 
 async function showNextCard() {
+    stopAudio()
     currentCardIndex++
 
     if (cards.length <= currentCardIndex) {
@@ -113,7 +113,10 @@ async function showNextCard() {
     showCardsRemaining()
 
     document.getElementById('header').textContent = "Question"
-    document.getElementById('question-text').innerHTML = renderMarkdown(cards[currentCardIndex].question, 'question')
+    const questionText = document.getElementById('question-text')
+    questionText.innerHTML = renderMarkdown(cards[currentCardIndex].question, 'question')
+    setupAudio(questionText)
+    autoplayFirst(questionText)
     document.getElementById('answer-section').hidden = true
     document.getElementById('answer-text').innerHTML = ''
     document.getElementById('text').scrollTop = 0
@@ -124,7 +127,11 @@ async function showNextCard() {
 }
 
 async function revealAnswer() {
-    document.getElementById('answer-text').innerHTML = renderMarkdown(cards[currentCardIndex].answer, 'answer')
+    stopAudio()
+    const answerText = document.getElementById('answer-text')
+    answerText.innerHTML = renderMarkdown(cards[currentCardIndex].answer, 'answer')
+    setupAudio(answerText)
+    autoplayFirst(answerText)
 
     const answerSection = document.getElementById('answer-section')
     answerSection.hidden = false
@@ -148,7 +155,7 @@ function finishedQuiz() {
 }
 
 async function recordAnswer(correct) {
-    const response = await fetch('http://localhost:3000/record-answer', {
+    const response = await fetch(`${SERVER_URL}/record-answer`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

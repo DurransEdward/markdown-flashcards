@@ -162,6 +162,12 @@ body {
   min-width: 0;
 }
 
+.card-audio {
+  display: block;
+  margin: 8px 0;
+  max-width: 100%;
+}
+
 .render-error {
   color: #b02a37;
   background-color: #f8d7da;

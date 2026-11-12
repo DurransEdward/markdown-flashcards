@@ -2,7 +2,7 @@
 
 **QUESTION**: What is Pythagoras' Theorem?
 
-**ANSWER**: Given a right angle triangle with sides \(a\), \(b\) and hypotenuse \(c\), it follows that:
+**ANSWER**: Given a right angle triangle with sides $a$, $b$ and hypotenuse $c$, it follows that:
 
 $$a^2 + b^2 = c^2$$
 
