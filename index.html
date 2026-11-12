@@ -11,14 +11,14 @@
 
 <body>
     <div id="card-container">
-        <div id="questions-remaining" hidden></div>
+        <div id="cards-remaining" hidden></div>
         <div id="card">
             <div id="badges">
                 <div id="important-badge" hidden>⚠️IMPORTANT⚠️</div>
                 <div id="level-badge" hidden></div>
             </div>
             <div id="text">
-                <h1 id="header" class="card-heading">↓↓ Load questions at the bottom of the page ↓↓</h1>
+                <h1 id="header" class="card-heading">↓↓ Load a deck at the bottom of the page ↓↓</h1>
                 <div id="question-text"></div>
                 <div id="answer-section" hidden>
                     <h1 class="card-heading">Answer</h1>
@@ -31,7 +31,7 @@
 
     <div id="buttons">
         <button id="reveal-button" hidden>Reveal Answer</button>
-        <button id="skip-button" hidden>Skip Question</button>
+        <button id="skip-button" hidden>Skip Card</button>
         <button id="correct-button" hidden>Correct</button>
         <button id="almost-correct-button" hidden>Almost Correct</button>
         <button id="incorrect-button" hidden>Incorrect</button>
@@ -39,8 +39,8 @@
     </div>
 
     <div id="file-input-container">
-        <input type="text" id="file-input" placeholder="Questions file name">
-        <button id="load-questions-button">Load Questions</button>
+        <input type="text" id="file-input" placeholder="Deck file name">
+        <button id="load-deck-button">Load Deck</button>
     </div>
     
     <script type="module" src="app.js"></script>

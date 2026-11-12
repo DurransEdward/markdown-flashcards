@@ -28,7 +28,7 @@ body {
 
 #level-badge,
 #important-badge,
-#questions-remaining {
+#cards-remaining {
   padding: 4px 12px;
   background-color: #ced4da;
   border-radius: 12px;
@@ -53,7 +53,7 @@ body {
   color: white;
 }
 
-#questions-remaining {
+#cards-remaining {
   width: fit-content;
   margin: 0 auto 8px;
 }

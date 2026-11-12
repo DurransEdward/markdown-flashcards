@@ -9,6 +9,6 @@ dist
 *__delete__*
 *__DELETE__*
 
-# Personal question decks
-questions/*
-!questions/example_questions.md
+# Personal card decks
+decks/*
+!decks/example_cards.md

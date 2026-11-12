@@ -9,36 +9,36 @@ app.use(express.json())
 app.use(cors())
 
 app.post('/record-answer', async (req, res) => {
-    const { questionsFileName, questionIndex, correct } = req.body
+    const { deckFileName, cardIndex, correct } = req.body
 
     if (
-        typeof questionsFileName !== 'string' ||
-        !questionsFileName ||
-        questionsFileName === '.' ||
-        questionsFileName === '..' ||
-        path.basename(questionsFileName) !== questionsFileName ||
-        questionsFileName.includes('\\') ||
+        typeof deckFileName !== 'string' ||
+        !deckFileName ||
+        deckFileName === '.' ||
+        deckFileName === '..' ||
+        path.basename(deckFileName) !== deckFileName ||
+        deckFileName.includes('\\') ||
         typeof correct !== 'boolean'
     ) {
-        res.status(400).send('Expected questionsFileName (file name) and correct (boolean)')
+        res.status(400).send('Expected deckFileName (file name) and correct (boolean)')
         return
     }
 
-    const questionsFilePath = path.join('questions', questionsFileName)
+    const deckFilePath = path.join('decks', deckFileName)
 
     try {
-        const data = await fs.readFile(questionsFilePath, 'utf8')
+        const data = await fs.readFile(deckFilePath, 'utf8')
         const entries = splitEntries(data)
 
-        if (!Number.isInteger(questionIndex) || questionIndex < 0 || questionIndex >= entries.length) {
-            res.status(400).send('Invalid questionIndex')
+        if (!Number.isInteger(cardIndex) || cardIndex < 0 || cardIndex >= entries.length) {
+            res.status(400).send('Invalid cardIndex')
             return
         }
 
-        const card = parseEntry(entries[questionIndex], questionIndex)
-        entries[questionIndex] = withLevelAndDate(entries[questionIndex], gradeCard(card, correct))
+        const card = parseEntry(entries[cardIndex], cardIndex)
+        entries[cardIndex] = withLevelAndDate(entries[cardIndex], gradeCard(card, correct))
 
-        await fs.writeFile(questionsFilePath, joinEntries(entries))
+        await fs.writeFile(deckFilePath, joinEntries(entries))
 
         res.send('OK')
     } catch (error) {
