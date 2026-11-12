@@ -203,7 +203,7 @@ test("the bundled example deck parses with every card due", async () => {
   const { readFile } = await import("node:fs/promises");
   const cards = parseCards(
     await readFile(
-      new URL("./decks/example_cards.md", import.meta.url),
+      new URL("./decks/example_deck.md", import.meta.url),
       "utf8",
     ),
   );

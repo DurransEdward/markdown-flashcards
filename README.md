@@ -27,7 +27,7 @@ npm run start
 
 This builds the app, starts the backend server (port 3000) and the front-end server (port 1234), and opens `http://localhost:1234` in your default browser. Press `Ctrl+C` in the terminal to stop everything.
 
-4. Type `example_cards.md` into the input field and click the "Load Deck" button. Deck files are loaded from the `decks` directory.
+4. Type `example_deck.md` into the input field and click the "Load Deck" button. Deck files are loaded from the `decks` directory.
 
 5. Click through the flash cards. Only cards that are due today are shown. Before revealing an answer you can click `Reveal Answer` or `Skip Card` (which leaves the card untouched). After revealing the answer, it appears below the question, and you can then mark how you did:
    - `Correct` moves the card up a level and records today's date.

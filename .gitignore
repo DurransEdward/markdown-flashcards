@@ -6,9 +6,16 @@ dist
 .parcel-cache
 
 # Files and directories marked for deletion
+
 *__delete__*
 *__DELETE__*
 
 # Personal card decks
+
 decks/*
-!decks/example_cards.md
+!decks/example_deck.md
+
+# AI agent context
+
+CLAUDE.md
+AGENTS.md
